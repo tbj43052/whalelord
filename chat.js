@@ -1,5 +1,5 @@
 /* ============================================================
-   COMMUNITY CHAT — shared feed for the landing page (floating panel) and game.html (side panel).
+   COMMUNITY CHAT: shared feed for the landing page (floating panel) and game.html (side panel).
    Simulated for now: a message pool, REAL WHALE lines and reactions to game events.
    To go live, swap tick()/add() for a WebSocket or polling client; the DOM contract stays the same:
      WhaleChat.mount({ log, form, input, name, seed, live }) → { add(user, text, cls), react(kind, vars), stop() }

@@ -1,9 +1,9 @@
 /* ============================================================
-   THE WHALE LORD — FEEDING FRENZY   (vanilla Canvas, no deps)
+   THE WHALE LORD: FEEDING FRENZY   (vanilla Canvas, no deps)
    ------------------------------------------------------------
    All sprites are drawn procedurally (flat cartoon vectors) so
    the game runs with zero art files. To use real art, drop
-   transparent PNGs at the paths listed in ASSETS — every file
+   transparent PNGs at the paths listed in ASSETS: every file
    that loads replaces its procedural fallback automatically.
    ============================================================ */
 'use strict';
@@ -35,7 +35,7 @@ const ASSETS = {
 };
 const WHALE_ORIGIN = { x: 192, y: 72 };        // where the whale's body centre sits inside its 340x170 sprite
 const USE_PNG_ASSETS = false;                   // set true once the PNGs above exist (false = procedural art only, no 404 probes)
-/* ---------- leaderboard backend (server/ folder — see server/README.md) ---------- */
+/* ---------- leaderboard backend (server/ folder: see server/README.md) ---------- */
 const API_BASE = '';                            // '' = same origin (the Express server also serves this site), or e.g. 'https://api.whalelord.xyz'
 const CLIENT_SALT = 'whalelord-frenzy-v1';      // must equal CLIENT_SALT on the server (obscurity only; the server-side checks do the real work)
 const LB_PERIOD = 'week';                       // window shown in the panel: 'week' | 'all'
@@ -146,7 +146,7 @@ window.addEventListener('blur', () => { dropInput(); if (game.state === 'playing
 document.addEventListener('visibilitychange', () => { if (document.hidden) dropInput(); });
 
 /* ============================================================
-   PROCEDURAL SPRITES — flat cartoon vectors with thick outlines
+   PROCEDURAL SPRITES: flat cartoon vectors with thick outlines
    (each is rasterised once at 2x into an offscreen canvas)
    ============================================================ */
 const OUT = '#161616';
@@ -284,7 +284,7 @@ function buildSprites() {
 }
 
 /* ============================================================
-   BACKGROUND — three parallax tiles (1440x540) drawn once
+   BACKGROUND: three parallax tiles (1440x540) drawn once
    ============================================================ */
 const TILE = 1440;
 function makeLayer(seed, draw) { const c = document.createElement('canvas'); c.width = TILE; c.height = H; const g = c.getContext('2d'); g.lineCap = 'round'; g.lineJoin = 'round'; draw(g, seeded(seed)); return c; }
@@ -398,7 +398,7 @@ function eat(e, base, kind) {
   if (game.score > game.best) { game.best = game.score; store.set('best', game.best); }
 }
 function miss() {
-  if (game.streak > 0) popup(whale.x + 100, whale.y - 40, 'MISS — FRENZY LOST', '#ff5d5d', 16, 1);
+  if (game.streak > 0) popup(whale.x + 100, whale.y - 40, 'MISS! FRENZY LOST', '#ff5d5d', 16, 1);
   game.streak = 0; game.mult = 1; SFX.miss();
 }
 function defuse(tp) {
@@ -607,8 +607,8 @@ function renderLB() {
   const lb = net.online ? net.board : getLB().slice().sort((a, b) => b.score - a.score).slice(0, 10);
   $('lb').innerHTML = lb.length
     ? lb.map((e, i) => `<li class="${i < 3 ? 'top' : ''}${me && e.name.toLowerCase() === me ? ' me' : ''}"><span class="rank">${i + 1}</span><span class="crown">${i < 3 ? crown(CROWNS[i]) : ''}</span><span class="name">${i < 3 ? '<span class="tag">REAL WHALE</span>' : ''}${esc(e.name)}</span><span class="pts">${fmt(e.score)}</span></li>`).join('')
-    : '<li class="empty">No scores yet this week — be the first REAL WHALE.</li>';
-  $('lb-note').textContent = net.online ? 'Live scores · best run per player · resets weekly.' : 'Leaderboard offline — scores are kept in this browser until the server is running.';
+    : '<li class="empty">No scores yet this week. Be the first REAL WHALE.</li>';
+  $('lb-note').textContent = net.online ? 'Live scores. Best run per player. Resets weekly.' : 'Offline mode active. Scores stay local until the server connects.';
 }
 function submitScore(name, score) { const lb = getLB(); lb.push({ name, score }); lb.sort((a, b) => b.score - a.score); lb.splice(10); store.set('lb', lb); store.set('name', name); renderLB(); }
 
@@ -656,12 +656,12 @@ async function submitOnline(name) {
 }
 async function finishSubmit(name) {
   const st = $('submit-status'); st.hidden = false; $('submit-form').hidden = true;
-  if (game.score <= 0) { st.textContent = 'No points this run — nothing to submit.'; return; }
-  if (!net.online) { submitScore(name, game.score); st.textContent = 'Leaderboard offline — score saved in this browser.'; return; }
-  if (!net.ticket) { st.textContent = 'This run has no session ticket, so it cannot be ranked. Start a new game.'; return; }
-  st.textContent = 'Submitting to the leaderboard…';
-  try { const d = await submitOnline(name); st.textContent = d.rank ? 'Saved! You are #' + d.rank + ' this week.' : 'Saved to the leaderboard!'; }
-  catch (e) { st.textContent = 'Leaderboard rejected this run: ' + e.message; }
+  if (game.score <= 0) { st.textContent = 'No points this run. Nothing to submit.'; return; }
+  if (!net.online) { submitScore(name, game.score); st.textContent = 'Leaderboard offline. Score saved locally.'; return; }
+  if (!net.ticket) { st.textContent = 'This run cannot be ranked. Start a new game to compete.'; return; }
+  st.textContent = 'Submitting score';
+  try { const d = await submitOnline(name); st.textContent = d.rank ? 'Saved. You are #' + d.rank + ' this week.' : 'Score saved.'; }
+  catch (e) { st.textContent = 'Score rejected: ' + e.message; }
 }
 /* Plain-JS SHA-256 for non-secure (http) origins where crypto.subtle is unavailable. */
 function sha256Fallback(str) {

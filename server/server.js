@@ -1,5 +1,5 @@
 'use strict';
-/* The Whale Lord — leaderboard API + static host.
+/* The Whale Lord: leaderboard API + static host.
    Serves the site one level up (index.html, game.html, assets/) and the REST API under /api. */
 require('dotenv').config();
 const path = require('path');
@@ -50,15 +50,15 @@ async function leaderboard(period = 'week', limitN = 10) {
 
 app.get('/api/health', (req, res) => res.json({ ok: true, db: mongoose.connection.readyState === 1 }));
 
-/* ENDPOINT 0 — start of a run: a signed ticket that proves when the game began (needed by submit-score). */
+/* ENDPOINT 0: start of a run: a signed ticket that proves when the game began (needed by submit-score). */
 app.post('/api/session', limit('session', 30), (req, res) => res.json({ ok: true, ticket: issueTicket() }));
 
-/* ENDPOINT 2 — GET /api/leaderboard?period=week|all → [{ username, score, timestamp }, ...] (top 10) */
+/* ENDPOINT 2: GET /api/leaderboard?period=week|all → [{ username, score, timestamp }, ...] (top 10) */
 app.get('/api/leaderboard', limit('board', 120), async (req, res, next) => {
   try { res.json(await leaderboard(req.query.period === 'all' ? 'all' : 'week', 10)); } catch (e) { next(e); }
 });
 
-/* ENDPOINT 1 — POST /api/submit-score { username, score, ticket, sig, stats: { eaten, level, durationMs } } */
+/* ENDPOINT 1: POST /api/submit-score { username, score, ticket, sig, stats: { eaten, level, durationMs } } */
 app.post('/api/submit-score', limit('submit', 20), async (req, res, next) => {
   try {
     const body = req.body || {}, stats = body.stats || {};

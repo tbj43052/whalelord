@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Whale Lord — Feeding Frenzy</title>
+<title>Feeding Frenzy | The Whale Lord</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@500;700;800;900&family=Lilita+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./chat.css">
 <style>
@@ -132,13 +132,13 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto 1
         <div class="big">FEEDING FRENZY</div>
         <p class="lead">Eat the <b>JEETS</b>. Devour the <b>PAPER HANDS</b>. Dodge the <b>FUD</b>.</p>
         <ul class="keys">
-          <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> swim · hold <kbd>LEFT CLICK</kbd> to follow the cursor</li>
-          <li><kbd>SPACE</kbd> or <kbd>LEFT CLICK</kbd> bite · <b>hold</b> either to keep the mouth wide open and eat while you move</li>
-          <li><kbd>P</kbd> pause · <kbd>M</kbd> mute · touch: drag = swim &amp; eat</li>
+          <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> swim. Hold <kbd>LEFT CLICK</kbd> to follow the cursor</li>
+          <li><kbd>SPACE</kbd> or <kbd>LEFT CLICK</kbd> bite. <b>Hold</b> to keep the mouth open and eat as you move</li>
+          <li><kbd>P</kbd> pause, <kbd>M</kbd> mute. On touch, drag to swim and eat</li>
         </ul>
-        <p class="hint">Consecutive bites build your Frenzy multiplier (up to 5X). Closing an empty mouth or taking a FUD hit resets it. Biting a torpedo defuses it.</p>
+        <p class="hint">Chain bites to build your Frenzy multiplier, up to 5X. An empty bite or a FUD hit resets it. Bite a torpedo to defuse it.</p>
         <div class="name-row"><input id="name-start" maxlength="16" placeholder="Your whale name" autocomplete="off" spellcheck="false" aria-label="Player name"></div>
-        <p class="hint">2–16 letters, digits, _ . - · needed to be ranked on the leaderboard · leave empty to play unranked</p>
+        <p class="hint">Use 2 to 16 letters, digits, _ . or - to get on the leaderboard. Leave blank to play unranked.</p>
         <button class="gold-btn big-btn" id="start" type="button">DIVE IN</button>
         <div class="best">BEST: <b id="best-title">0</b></div>
       </div>
@@ -157,7 +157,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto 1
           <div><span>EATEN</span><b id="o-eaten">0</b></div>
           <div><span>MAX FRENZY</span><b id="o-mult">1X</b></div>
         </div>
-        <form class="inline" id="submit-form"><input id="name" maxlength="16" placeholder="Your name" autocomplete="off"><button class="gold-btn" type="submit">SUBMIT SCORE</button></form>
+        <form class="inline" id="submit-form"><input id="name" maxlength="16" placeholder="Your name" autocomplete="off"><button class="gold-btn" type="submit">SUBMIT</button></form>
         <p id="submit-status" hidden></p>
         <button class="gold-btn big-btn" id="again" type="button">PLAY AGAIN</button>
         <div class="best">BEST: <b id="o-best">0</b></div>
@@ -169,12 +169,12 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto 1
     <section class="panel">
       <h2>Global Leaderboard (Weekly)</h2>
       <ol class="lb" id="lb"></ol>
-      <div class="note" id="lb-note">Loading scores…</div>
+      <div class="note" id="lb-note">Loading scores</div>
     </section>
     <section class="panel chat">
       <h2>Community Chat</h2>
       <div class="chat-log" id="chat-log" aria-live="polite"></div>
-      <form class="chat-in" id="chat-form"><input id="chat-input" maxlength="140" placeholder="Say something…" autocomplete="off"><button class="gold-btn" type="submit">SEND</button></form>
+      <form class="chat-in" id="chat-form"><input id="chat-input" maxlength="140" placeholder="Say something" autocomplete="off"><button class="gold-btn" type="submit">SEND</button></form>
     </section>
   </aside>
 </main>
