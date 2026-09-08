@@ -1,17 +1,17 @@
 /* ============================================================
    LOADING SCREEN (#loading-screen): the "The Whale Lord Loading Screen" component wired as a full-screen overlay.
    Counter rules:
-     - requestAnimationFrame drives BOTH the bar width and the percentage text from 1% to 100% over 2800 ms.
+     - requestAnimationFrame drives BOTH the bar width and the percentage text from 1% to 100% over 1800 ms.
        The value may advance at most one whole number per frame, so every integer 1..100 renders in order
        (on a slow frame the count simply takes a little longer; it never skips).
-     - Assets fast (< 2.8 s): the full 1 → 100 run still plays out before the screen goes.
+     - Assets fast (< 1.8 s): the full 1 → 100 run still plays out before the screen goes.
        Assets slow: the count crawls to 99% and holds there until done() is called, then steps to 100%.
      - At 100%: hold 200 ms, fade the overlay out over 0.5 s (CSS opacity), then display:none + remove from the DOM.
    API: WhaleLoader.start({ maxMs })  ·  WhaleLoader.done()  ·  WhaleLoader.set(p) (p >= 1 counts as done())
    ============================================================ */
 (function () {
   'use strict';
-  const DURATION = 2800, HOLD_MS = 200, FADE_MS = 500;
+  const DURATION = 1800, HOLD_MS = 200, FADE_MS = 500;
   const STARS = [[6, 14, .55, 1.4], [14, 62, .35, 1.2], [23, 31, .45, 1.1], [31, 84, .3, 1.3], [42, 12, .4, 1.2], [55, 91, .35, 1.2], [63, 24, .5, 1.4], [71, 68, .3, 1.1], [78, 9, .45, 1.3], [86, 47, .35, 1.2], [92, 82, .5, 1.4], [96, 21, .3, 1.1], [48, 58, .25, 1], [9, 90, .4, 1.2], [37, 47, .25, 1], [67, 42, .3, 1.1]];
   const HTML = '<div class="ls-glow" aria-hidden="true"></div><div class="ls-stars" aria-hidden="true"></div><div class="ls-vignette" aria-hidden="true"></div>' +
     '<div class="ls-inner"><div class="ls-title"><span class="ls-title-shadow" aria-hidden="true">THE WHALE LORD</span><span class="ls-title-gold">THE WHALE LORD</span></div>' +
