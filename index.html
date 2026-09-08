@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Whale Lord</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@500;700;800&family=Manrope:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./chat.css">
+<style>
+:root{--abyss:#050b14;--deep:#0b192e;--gold:#d4af37;--gold-light:#f3d97a;--gold-pale:#fff2b0;--gold-dark:#8a6a12;--gold-deep:#b08d24;--ink:#e6f1f7;--aqua:#6fd8f0}
+html,body{margin:0;height:100%;background:var(--abyss);font-family:'Nunito',system-ui,sans-serif;color:var(--ink);overflow:hidden}
+a{color:var(--gold)}a:hover{color:var(--gold-light)}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes mascotBob{0%,100%{transform:translate(-50%,-50%) scale(1.02) translateY(0) rotate(0deg)}50%{transform:translate(-50%,-50%) scale(1.02) translateY(-10px) rotate(.5deg)}}
+@keyframes bubbleRise{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.7}100%{transform:translateY(-110vh) scale(1.4);opacity:0}}
+@keyframes rays{0%,100%{opacity:.25}50%{opacity:.5}}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,10px)}15%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
+.hero{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;background:var(--deep)}
+.scene{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(1.02);animation:mascotBob 6s ease-in-out infinite;width:max(100vw,calc(100vh * 2048 / 1056));aspect-ratio:2048/1056;background:url(./assets/whale-lord-hd-stage-v3.png) center/cover no-repeat;image-rendering:-webkit-optimize-contrast}
+.fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ray{position:absolute;top:-20%;height:120%;filter:blur(24px);background:linear-gradient(180deg,rgba(160,240,255,.28),rgba(160,240,255,0))}
+.ray.a{left:20%;width:16%;transform:skewX(-14deg);animation:rays 7s ease-in-out infinite}
+.ray.b{left:58%;width:10%;transform:skewX(-10deg);animation:rays 9s ease-in-out infinite 2s;background:linear-gradient(180deg,rgba(160,240,255,.22),rgba(160,240,255,0))}
+.bubble{position:absolute;bottom:-30px;border-radius:50%;border:1px solid rgba(180,235,255,.6);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.7),rgba(120,220,255,.1));animation:bubbleRise linear infinite}
+.orb{position:absolute;z-index:20;aspect-ratio:1/1;animation:orbFloat ease-in-out infinite}
+.orb button{display:block;width:100%;height:100%;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;overflow:hidden;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 0 rgba(212,175,55,0)}
+.orb button:hover{transform:scale(1.08) translateY(-6px);box-shadow:0 0 35px rgba(212,175,55,.85),0 0 0 2px rgba(243,217,122,.9)}
+.orb img{display:block;width:100%;height:100%;border-radius:50%;transform:scale(1.07)}
+header{position:absolute;left:0;right:0;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 28px;background:linear-gradient(180deg,rgba(5,11,20,.55),rgba(5,11,20,0))}
+.title{font:900 clamp(22px,2.4vw,36px)/1 'Cinzel',serif;letter-spacing:.08em;text-transform:uppercase;background:linear-gradient(180deg,var(--gold-pale) 0%,var(--gold) 45%,var(--gold-dark) 60%,var(--gold-light) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #3a2a05) drop-shadow(0 0 16px rgba(212,175,55,.6))}
+.socials{display:flex;align-items:center;gap:10px}
+.socials a{height:40px;display:grid;place-items:center;background:#fff;border:2px solid #111;box-shadow:3px 3px 0 #111;color:#111;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.socials a.icon{width:40px}
+.socials a.token{padding:0 14px;background:#f5d547;font:800 13px/1 'Nunito',sans-serif;letter-spacing:.04em}
+.socials a.play{padding:0 14px;background:#6fd8f0;font:800 13px/1 'Nunito',sans-serif;letter-spacing:.04em}
+.socials a:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111;color:#111}
+.socials button.chat{box-sizing:content-box;height:40px;display:flex;align-items:center;gap:7px;padding:0 14px;background:#6fd8f0;border:2px solid #111;box-shadow:3px 3px 0 #111;color:#111;font:800 13px/1 'Nunito',sans-serif;letter-spacing:.04em;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.socials button.chat:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111}
+.socials button.chat[aria-pressed="true"]{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;background:#b9f0ff}
+/* floating community chat (drag it by its header) */
+.chat-float{position:fixed;right:28px;top:88px;z-index:40;width:min(320px,calc(100vw - 32px));height:min(440px,calc(100vh - 180px));display:flex;flex-direction:column;border-radius:14px;background:linear-gradient(180deg,rgba(9,27,46,.94),rgba(5,14,26,.97));border:2px solid var(--aqua);box-shadow:0 0 0 1px #0b3a4a,0 20px 50px rgba(0,0,0,.55);overflow:hidden;animation:chatIn .25s cubic-bezier(.2,.8,.2,1)}
+.chat-float[hidden]{display:none}
+.chat-head{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;font:800 13px/1 'Nunito',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--aqua);background:rgba(0,0,0,.4);border-bottom:1px solid rgba(111,216,240,.35);cursor:grab;user-select:none;touch-action:none}
+.chat-float.dragging .chat-head{cursor:grabbing}
+.chat-head .grip{opacity:.45;font-size:15px;letter-spacing:-3px}
+.chat-head .chat-title{flex:1}
+.chat-head button{cursor:pointer;width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(111,216,240,.5);background:transparent;color:var(--aqua);font-size:17px;line-height:1;display:grid;place-items:center}
+.chat-head button:hover{background:rgba(111,216,240,.15)}
+@keyframes chatIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+footer{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:12px 28px;background:rgba(5,11,20,.85);backdrop-filter:blur(12px);border-top:1px solid rgba(212,175,55,.35)}
+.brand{font:800 12px/1 'Nunito',sans-serif;letter-spacing:.14em;color:#fff;text-transform:uppercase}
+.brand.right{text-align:right}
+.brand span{color:var(--gold);margin:0 6px}
+.ca{display:flex;align-items:center;gap:8px;position:relative}
+.ca-pill{font:700 13px/1 ui-monospace,Menlo,monospace;color:var(--ink);padding:11px 18px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(212,175,55,.5);letter-spacing:.02em}
+.ca-pill b{color:var(--gold);font-family:'Nunito',sans-serif;font-weight:800;margin-right:8px}
+.gold-btn{cursor:pointer;font:800 13px/1 'Nunito',sans-serif;letter-spacing:.06em;padding:11px 18px;border-radius:999px;border:0;color:#1a1200;background:linear-gradient(180deg,var(--gold-light),var(--gold) 55%,var(--gold-deep));box-shadow:0 2px 0 #6b520f,0 0 16px rgba(212,175,55,.35);transition:transform .15s,filter .15s}
+.gold-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.gold-btn:active{transform:translateY(1px);box-shadow:0 0 0 #6b520f}
+.toast{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%);padding:8px 16px;border-radius:999px;background:var(--gold);color:#1a1200;font:800 13px/1 'Nunito',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.4);animation:toast 1.8s ease forwards;white-space:nowrap}
+.backdrop{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:rgba(5,11,20,.6);backdrop-filter:blur(16px);animation:fadeIn .25s ease}
+.backdrop[hidden]{display:none}
+.modal{width:min(880px,100%);max-height:100%;overflow:auto;border-radius:20px;border:1.5px solid rgba(212,175,55,.6);background:linear-gradient(180deg,rgba(14,50,80,.75),rgba(11,25,46,.85));backdrop-filter:blur(20px);box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(212,175,55,.15);animation:modalIn .35s cubic-bezier(.2,.8,.2,1)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 28px;border-bottom:1px solid rgba(212,175,55,.25)}
+.modal-head h2{margin:0;font:700 clamp(18px,2.2vw,28px)/1.1 'Cinzel',serif;background:linear-gradient(180deg,var(--gold-pale),var(--gold) 55%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav{display:flex;align-items:center;gap:8px;color:var(--gold);font:700 13px/1 'Nunito',sans-serif}
+.nav button{cursor:pointer;width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(212,175,55,.6);background:transparent;color:var(--gold);font-size:18px;line-height:1}
+.nav button:hover{background:rgba(212,175,55,.15)}
+.nav span{opacity:.8;min-width:36px;text-align:center}
+.modal-body{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;padding:24px 28px}
+.modal-pic{aspect-ratio:16/9;display:grid;place-items:center}
+.modal-pic img{height:100%;max-width:100%;object-fit:contain;display:block;filter:drop-shadow(0 16px 36px rgba(0,0,0,.6))}
+.modal-text{display:flex;flex-direction:column;gap:12px;min-width:0}
+.eyebrow{font:800 11px/1 'Nunito',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua)}
+.lore{margin:0;font:400 16px/1.7 'Manrope',system-ui,sans-serif;letter-spacing:.005em;color:#eaf3f8;text-wrap:pretty}
+.modal-foot{display:flex;justify-content:flex-end;padding:16px 28px 24px;border-top:1px solid rgba(212,175,55,.25)}
+.modal-foot .gold-btn{font-size:14px;letter-spacing:.08em;padding:12px 28px}
+@media (max-width:720px){.modal-body{grid-template-columns:1fr}footer{grid-template-columns:1fr;justify-items:center}.brand.right{display:none}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="scene" id="scene">
+    <div class="fx"><div class="ray a"></div><div class="ray b"></div><div id="bubbles"></div></div>
+    <!-- orbs injected by script -->
+  </div>
+  <header>
+    <div class="title">The Whale Lord</div>
+    <nav class="socials">
+      <a class="icon" href="https://t.me/" target="_blank" title="Telegram"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 11.2 21 3.6c.9-.3 1.6.2 1.3 1.5l-3.1 14.7c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8-11 6.9-4.7-1.5c-1-.3-1-1 .6-1.6z"/></svg></a>
+      <a class="icon" href="https://x.com/" target="_blank" title="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2h3.4l-7.4 8.5L23 22h-6.8l-5.3-7-6.1 7H1.4l7.9-9.1L1 2h7l4.8 6.4L18.2 2zm-1.2 18h1.9L7.1 3.9H5.1L17 20z"/></svg></a>
+      <a class="play" href="./game.html" title="Play Feeding Frenzy">&#9654; PLAY</a>
+      <button class="chat" id="chat-toggle" type="button" aria-pressed="false" aria-controls="chat-float" title="Community chat"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v4l5-4h7a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>CHAT</button>
+      <a class="token" href="#" target="_blank">$WHALELORD</a>
+    </nav>
+  </header>
+  <footer>
+    <div class="brand">Official Website <span>|</span> Dive Into Dominance</div>
+    <div class="ca">
+      <div class="ca-pill"><b>CONTRACT:</b><span id="ca">0xWh4leL0rd2026c0ntrActAddr3ss456</span></div>
+      <button class="gold-btn" id="copy">Copy CA</button>
+    </div>
+    <div class="brand right">Official Website <span>|</span> Dive Into Dominance</div>
+  </footer>
+  <section class="chat-float" id="chat-float" hidden aria-label="Community chat">
+    <div class="chat-head" id="chat-head"><span class="grip" aria-hidden="true">⋮⋮</span><span class="chat-title">Community Chat</span><button type="button" id="chat-close" aria-label="Close chat">×</button></div>
+    <div class="chat-log" id="chat-log" aria-live="polite"></div>
+    <form class="chat-in" id="chat-form"><input id="chat-input" maxlength="140" placeholder="Say something…" autocomplete="off"><button class="gold-btn" type="submit">SEND</button></form>
+  </section>
+  <div class="backdrop" id="backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head"><h2 id="m-title"></h2><div class="nav"><button id="prev" aria-label="Previous">‹</button><span id="counter"></span><button id="next" aria-label="Next">›</button></div></div>
+      <div class="modal-body"><div class="modal-pic"><img id="m-img" alt=""></div><div class="modal-text"><div class="eyebrow">About</div><p class="lore" id="m-lore"></p></div></div>
+      <div class="modal-foot"><button class="gold-btn" id="close">Close</button></div>
+    </div>
+  </div>
+</div>
+<script src="./chat.js"></script>
+<script>
+// Edit this array to change bubble art, titles and panel text. left/top/size are % of the 2048x1056 artwork.
+const memories = [
+  { title: 'Feasting on the Competition', image: './assets/feasting-clear.png', lore: 'Fine dining. The paper hands are delicious tonight. $WHALELORD', left: '15.8%', top: '17.8%', size: '14.8%', dur: '4s', delay: '0s' },
+  { title: 'The Vault', image: './assets/the-vault.png', lore: 'Collecting memes like they’re infinity stones. We know exactly which bags to hold. Yours should be $WHALELORD.', left: '67.3%', top: '10.2%', size: '15.8%', dur: '5s', delay: '1s' },
+  { title: 'Here to Stay', image: './assets/here-to-stay-v2.png', lore: "This isn't a leash. It's the anchor holding down the entire market cap. Feel the weight of $WHALELORD.", left: '13.3%', top: '59.5%', size: '16.8%', dur: '4.5s', delay: '0.5s' },
+  { title: 'Nonstop', image: './assets/nonstop.png', lore: 'The market never sleeps, and neither do I. While the world dreams, I build the floors they will eventually stand on. Trust the process, trust the chart. $WHALELORD', left: '80%', top: '34.8%', size: '15.8%', dur: '5.5s', delay: '1.5s' },
+  { title: 'Whale Watch', image: './assets/whale-watch-v5.png', lore: 'Just spotted another school of jeets trying to swim against the current. Watching them panic sell is better than Netflix. $WHALELORD.', left: '70.2%', top: '62.3%', size: '16.8%', dur: '4.8s', delay: '0.8s' }
+];
+const HOVER_SOUND = true;
+const scene = document.getElementById('scene');
+// ambient bubbles
+const bubbles = document.getElementById('bubbles');
+for (let i = 0; i < 22; i++) { const b = document.createElement('div'); const s = 4 + Math.round(Math.random() * 14); b.className = 'bubble'; b.style.cssText = `left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${9+Math.random()*12}s;animation-delay:${-Math.random()*20}s`; bubbles.appendChild(b); }
+// orbs
+memories.forEach((m, i) => {
+  const w = document.createElement('div'); w.className = 'orb';
+  w.style.cssText = `left:${m.left};top:${m.top};width:${m.size};animation-duration:${m.dur};animation-delay:${m.delay}`;
+  const btn = document.createElement('button'); btn.setAttribute('aria-label', m.title);
+  const img = document.createElement('img'); img.src = m.image; img.alt = '';
+  btn.appendChild(img); btn.addEventListener('click', () => openModal(i)); btn.addEventListener('mouseenter', () => pop(i));
+  w.appendChild(btn); scene.appendChild(w);
+});
+// modal
+let open = null;
+const backdrop = document.getElementById('backdrop');
+function openModal(i) { open = i; const m = memories[i]; document.getElementById('m-title').textContent = m.title; document.getElementById('m-lore').textContent = m.lore; const img = document.getElementById('m-img'); img.src = m.image; img.alt = m.title; document.getElementById('counter').textContent = (i + 1) + ' / ' + memories.length; backdrop.hidden = false; }
+function closeModal() { open = null; backdrop.hidden = true; }
+function step(d) { if (open === null) return; openModal((open + d + memories.length) % memories.length); }
+document.getElementById('close').onclick = closeModal;
+document.getElementById('prev').onclick = () => step(-1);
+document.getElementById('next').onclick = () => step(1);
+backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+window.addEventListener('keydown', e => { if (open === null) return; if (e.key === 'Escape') closeModal(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
+// copy CA + toast
+let toastTimer;
+document.getElementById('copy').addEventListener('click', () => {
+  navigator.clipboard?.writeText(document.getElementById('ca').textContent);
+  document.querySelector('.toast')?.remove(); const t = document.createElement('div'); t.className = 'toast'; t.textContent = 'Copied!'; document.querySelector('.ca').appendChild(t);
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.remove(), 1800);
+});
+// hover pop sounds: one pentatonic note per orb (C5 D5 E5 G5 A5). Browsers block audio until the first click/keypress.
+const notes = [523.25, 587.33, 659.25, 783.99, 880];
+let ac;
+function unlockAudio() { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); }
+['pointerdown', 'keydown'].forEach(t => window.addEventListener(t, unlockAudio, { passive: true }));
+function pop(i) {
+  if (!HOVER_SOUND) return; unlockAudio(); if (!ac || ac.state !== 'running') return;
+  const f = notes[i] || 660, t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(f * 0.6, t); o.frequency.exponentialRampToValueAtTime(f * 1.5, t + 0.03); o.frequency.exponentialRampToValueAtTime(f, t + 0.11);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.22, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+  o.connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.16);
+}
+// ---- floating community chat (same feed as the game page, via chat.js). CHAT button toggles it; drag it by its header. ----
+const chatPanel = document.getElementById('chat-float'), chatBtn = document.getElementById('chat-toggle'), chatHead = document.getElementById('chat-head');
+const chat = WhaleChat.mount({ log: document.getElementById('chat-log'), form: document.getElementById('chat-form'), input: document.getElementById('chat-input'),
+  name: () => { try { return JSON.parse(localStorage.getItem('wl.name') || '""'); } catch (e) { return ''; } } });
+const chatClamp = (x, y) => [Math.max(8, Math.min(innerWidth - chatPanel.offsetWidth - 8, x)), Math.max(8, Math.min(innerHeight - chatPanel.offsetHeight - 8, y))];
+function chatPlace(x, y) { [x, y] = chatClamp(x, y); chatPanel.style.left = x + 'px'; chatPanel.style.top = y + 'px'; chatPanel.style.right = 'auto'; }
+function setChat(show) {
+  chatPanel.hidden = !show; chatBtn.setAttribute('aria-pressed', String(show));
+  if (!show) return;
+  try { const p = JSON.parse(localStorage.getItem('wl.chatPos') || 'null'); if (p) chatPlace(p.x, p.y); } catch (e) { /* ignore */ }
+  const log = document.getElementById('chat-log'); log.scrollTop = log.scrollHeight;
+}
+chatBtn.addEventListener('click', () => setChat(chatPanel.hidden));
+document.getElementById('chat-close').addEventListener('click', () => setChat(false));
+window.addEventListener('keydown', e => { if (e.key === 'Escape' && !chatPanel.hidden && open === null) setChat(false); });
+let chatDrag = null;
+chatHead.addEventListener('pointerdown', e => {
+  if (e.button !== 0 || e.target.closest('button')) return;
+  const r = chatPanel.getBoundingClientRect(); chatDrag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+  chatPanel.classList.add('dragging'); try { chatHead.setPointerCapture(e.pointerId); } catch (err) { /* synthetic events have no active pointer */ } e.preventDefault();
+});
+chatHead.addEventListener('pointermove', e => { if (chatDrag) chatPlace(e.clientX - chatDrag.dx, e.clientY - chatDrag.dy); });
+const chatDragEnd = () => {
+  if (!chatDrag) return; chatDrag = null; chatPanel.classList.remove('dragging');
+  const r = chatPanel.getBoundingClientRect(); try { localStorage.setItem('wl.chatPos', JSON.stringify({ x: Math.round(r.left), y: Math.round(r.top) })); } catch (e) { /* ignore */ }
+};
+chatHead.addEventListener('pointerup', chatDragEnd); chatHead.addEventListener('pointercancel', chatDragEnd);
+window.addEventListener('resize', () => { if (!chatPanel.hidden && chatPanel.style.left) chatPlace(parseFloat(chatPanel.style.left), parseFloat(chatPanel.style.top)); });
+</script>
+</body>
+</html>
