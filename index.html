@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Whale Lord</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&family=Jost:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./ui.css?v=3">
@@ -18,8 +18,8 @@ a{color:var(--gold)}a:hover{color:var(--gold-light)}
 @keyframes rays{0%,100%{opacity:.25}50%{opacity:.5}}
 @keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.hero{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;background:var(--deep)}
-.scene{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(1.02);animation:mascotBob 6s ease-in-out infinite;width:max(100vw,calc(100vh * 2048 / 1056));aspect-ratio:2048/1056;background:url(./assets/whale-lord-hd-stage-v3.png) center/cover no-repeat;image-rendering:-webkit-optimize-contrast}
+.hero{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:var(--deep)}
+.scene{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(1.02);animation:mascotBob 6s ease-in-out infinite;width:max(100vw,calc(100vh * 2048 / 1056));width:max(100vw,calc(100dvh * 2048 / 1056));aspect-ratio:2048/1056;background:url(./assets/whale-lord-hd-stage-v3.png) center/cover no-repeat;image-rendering:-webkit-optimize-contrast}
 .fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .ray{position:absolute;top:-20%;height:120%;filter:blur(24px);background:linear-gradient(180deg,rgba(160,240,255,.28),rgba(160,240,255,0))}
 .ray.a{left:20%;width:16%;transform:skewX(-14deg);animation:rays 7s ease-in-out infinite}
@@ -63,7 +63,25 @@ footer{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;grid-tem
 .lore{margin:0;font:400 16px/1.7 'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:.005em;color:#eaf3f8;text-wrap:pretty}
 .modal-foot{display:flex;justify-content:flex-end;padding:16px 28px 24px;border-top:1px solid rgba(212,175,55,.25)}
 .modal-foot .gold-btn{font-size:14px;letter-spacing:.08em;padding:12px 28px}
-@media (max-width:720px){.modal-body{grid-template-columns:1fr}footer{grid-template-columns:1fr;justify-items:center}.brand.right{display:none}header{flex-wrap:wrap;justify-content:center;gap:10px}.socials{flex-wrap:wrap;justify-content:center}}
+#orb-strip{display:none}
+@media (max-width:720px){
+  .modal-body{grid-template-columns:1fr}
+  header{padding:10px 12px;flex-direction:column;align-items:center;gap:8px}
+  .title{font-size:22px}
+  .socials{flex-wrap:wrap;justify-content:center;gap:8px}
+  .nav-btn,.socials .gold-btn{height:36px;padding:0 10px;font-size:11px}
+  .nav-btn.icon{width:36px}
+  .chat-float{top:110px;right:16px}
+  /* phones crop the wide artwork, so the five story bubbles move into a strip above the contract bar */
+  #orb-strip{display:flex;position:absolute;left:0;right:0;bottom:120px;z-index:20;justify-content:center;gap:10px;padding:0 10px;pointer-events:none}
+  #orb-strip .orb{position:relative;width:min(64px,16vw);flex:0 0 auto;pointer-events:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
+  #orb-strip .orb button{box-shadow:0 0 0 2px rgba(243,217,122,.55)}
+  footer{grid-template-columns:1fr;justify-items:center;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+  .brand.right{display:none}
+  .ca{gap:8px;flex-wrap:wrap;justify-content:center}
+  .ca-pill{padding:9px 12px;font-size:12px}
+}
+@media (max-width:420px){.socials{gap:6px}.nav-btn,.socials .gold-btn{padding:0 8px;font-size:10px;letter-spacing:.06em}.nav-btn.icon{width:34px}}
 </style>
 </head>
 <body>
@@ -72,6 +90,7 @@ footer{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;grid-tem
     <div class="fx"><div class="ray a"></div><div class="ray b"></div><div id="bubbles"></div></div>
     <!-- orbs injected by script -->
   </div>
+  <div id="orb-strip" aria-label="Story bubbles"></div>
   <header class="site-header">
     <div class="title">The Whale Lord</div>
     <nav class="socials">
@@ -133,6 +152,15 @@ memories.forEach((m, i) => {
   btn.appendChild(img); btn.addEventListener('click', () => openModal(i)); btn.addEventListener('mouseenter', () => pop(i));
   w.appendChild(btn); scene.appendChild(w);
 });
+// phones: the artwork is cropped to the centre, so the bubbles live in a strip above the contract bar instead
+const strip = document.getElementById('orb-strip'); let stripMode = false;
+function layoutOrbs() {
+  const mobile = innerWidth <= 720;
+  if (mobile && !stripMode) { document.querySelectorAll('.scene .orb').forEach(o => { o.dataset.css = o.style.cssText; o.style.cssText = 'animation-duration:' + o.style.animationDuration + ';animation-delay:' + o.style.animationDelay; strip.appendChild(o); }); stripMode = true; }
+  else if (!mobile && stripMode) { document.querySelectorAll('#orb-strip .orb').forEach(o => { o.style.cssText = o.dataset.css; scene.appendChild(o); }); stripMode = false; }
+  if (mobile) strip.style.bottom = (document.querySelector('footer').offsetHeight + 12) + 'px';
+}
+layoutOrbs(); window.addEventListener('resize', layoutOrbs);
 // modal
 let open = null;
 const backdrop = document.getElementById('backdrop');
@@ -145,9 +173,12 @@ document.getElementById('next').onclick = () => step(1);
 backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
 window.addEventListener('keydown', e => { if (open === null) return; if (e.key === 'Escape') closeModal(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
 // copy CA: the button itself flips to a green COPIED! state for a moment
+const caEl = document.getElementById('ca'), CA_FULL = caEl.textContent.trim();
+function fitCA() { caEl.textContent = innerWidth <= 520 ? CA_FULL.slice(0, 10) + '...' + CA_FULL.slice(-6) : CA_FULL; }   // shortened on phones; the full address is what gets copied
+fitCA(); window.addEventListener('resize', fitCA);
 const copyBtn = document.getElementById('copy'); let copyTimer;
 copyBtn.addEventListener('click', () => {
-  navigator.clipboard?.writeText(document.getElementById('ca').textContent).catch(() => {});
+  navigator.clipboard?.writeText(CA_FULL).catch(() => {});
   copyBtn.classList.add('copied'); copyBtn.innerHTML = '<span class="check" aria-hidden="true">&#10003;</span> COPIED!';
   clearTimeout(copyTimer); copyTimer = setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy CA'; }, 1600);
 });
