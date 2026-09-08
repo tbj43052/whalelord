@@ -246,7 +246,7 @@ function drawFish(g, color, dark, frame) {
   g.beginPath(); g.arc(-13, -2, 2.6, 0, TAU); g.fillStyle = '#111'; g.fill();
   g.beginPath(); g.ellipse(-19, 5, 2.5, 3.5, 0, 0, TAU); g.fillStyle = '#5c1622'; g.fill(); g.lineWidth = 1.5; g.stroke();
   g.beginPath(); g.moveTo(-8, -16); g.quadraticCurveTo(-4, -22, -6, -25); g.quadraticCurveTo(-11, -20, -8, -16); g.fillStyle = '#9fe6ff'; g.fill();
-  g.font = "900 8px 'Nunito', sans-serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = OUT; g.fillText('JEET', -1, 1);
+  g.font = "900 8px 'Plus Jakarta Sans', sans-serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = OUT; g.fillText('JEET', -1, 1);
 }
 
 /* Crumpled PAPER HANDS note, origin at centre */
@@ -256,7 +256,7 @@ function drawPaper(g) {
   g.fillStyle = '#f4f1e8'; g.fill(); outline(g, 3);
   g.strokeStyle = 'rgba(0,0,0,.25)'; g.lineWidth = 1.5;
   [[-20, -10, -6, 6], [8, -18, 2, 0], [20, 10, 4, 8], [-16, 18, -4, 6]].forEach(([a, b, c, d]) => { g.beginPath(); g.moveTo(a, b); g.lineTo(c, d); g.stroke(); });
-  g.font = "900 9px 'Nunito', sans-serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = OUT; g.fillText('PAPER', 0, -5); g.fillText('HANDS', 0, 6);
+  g.font = "900 9px 'Plus Jakarta Sans', sans-serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = OUT; g.fillText('PAPER', 0, -5); g.fillText('HANDS', 0, 6);
 }
 
 /* FUD torpedo, facing left, origin at centre. frame spins the propeller */
@@ -271,7 +271,7 @@ function drawTorpedo(g, frame) {
   g.beginPath(); g.moveTo(-36, -9); g.lineTo(44, -8); g.lineWidth = 2.5; g.strokeStyle = 'rgba(255,255,255,.22)'; g.stroke();
   g.beginPath(); g.moveTo(-40, -14); g.quadraticCurveTo(-72, -6, -72, 0); g.quadraticCurveTo(-72, 6, -40, 14); g.closePath(); g.fillStyle = DARK; g.fill(); outline(g, 3);
   g.fillStyle = '#c0262d'; g.fillRect(-22, -9, 40, 18); g.lineWidth = 2.5; g.strokeStyle = OUT; g.strokeRect(-22, -9, 40, 18);
-  g.font = "900 12px 'Nunito', sans-serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff'; g.fillText('FUD', -2, 1);
+  g.font = "900 12px 'Plus Jakarta Sans', sans-serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff'; g.fillText('FUD', -2, 1);
   g.fillStyle = '#6b7a7b'; [-30, 26, 38].forEach(x => { g.beginPath(); g.arc(x, 0, 2, 0, TAU); g.fill(); });
 }
 
@@ -532,19 +532,19 @@ function drawFx(g) {
   g.globalAlpha = 1; g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineJoin = 'round';
   for (const p of pops) {
     const k = p.t / p.life; g.globalAlpha = k > 0.6 ? 1 - (k - 0.6) / 0.4 : 1;
-    g.font = p.size + "px 'Lilita One', 'Nunito', sans-serif"; g.lineWidth = 4; g.strokeStyle = '#000'; g.strokeText(p.text, p.x, p.y); g.fillStyle = p.color; g.fillText(p.text, p.x, p.y);
+    g.font = "900 " + p.size + "px 'Outfit', 'Plus Jakarta Sans', sans-serif"; g.lineWidth = 4; g.strokeStyle = '#000'; g.strokeText(p.text, p.x, p.y); g.fillStyle = p.color; g.fillText(p.text, p.x, p.y);
   }
   g.globalAlpha = 1;
   for (const w of warns) {
     if (Math.floor(w.t * 10) % 2) continue;
     g.fillStyle = '#ff3b3b'; g.beginPath(); g.moveTo(W - 14, w.y); g.lineTo(W - 44, w.y - 18); g.lineTo(W - 44, w.y + 18); g.closePath(); g.fill(); g.lineWidth = 3; g.strokeStyle = '#000'; g.stroke();
-    g.fillStyle = '#fff'; g.font = "16px 'Lilita One', sans-serif"; g.fillText('!', W - 36, w.y + 1);
+    g.fillStyle = '#fff'; g.font = "900 16px 'Outfit', sans-serif"; g.fillText('!', W - 36, w.y + 1);
   }
   if (game.banner) {
     const b = game.banner, k = b.t / b.life, s = k < 0.15 ? 0.6 + (k / 0.15) * 0.4 : 1, a = k > 0.8 ? 1 - (k - 0.8) / 0.2 : 1;
     g.save(); g.globalAlpha = a; g.translate(W / 2, H * 0.4); g.scale(s, s);
-    g.font = "64px 'Lilita One', sans-serif"; g.lineWidth = 8; g.strokeStyle = '#000'; g.strokeText(b.text, 0, 0); g.fillStyle = '#ffe45c'; g.fillText(b.text, 0, 0);
-    g.font = "24px 'Lilita One', sans-serif"; g.lineWidth = 5; g.strokeText(b.sub, 0, 52); g.fillStyle = '#7ee081'; g.fillText(b.sub, 0, 52);
+    g.font = "900 64px 'Outfit', sans-serif"; g.lineWidth = 8; g.strokeStyle = '#000'; g.strokeText(b.text, 0, 0); g.fillStyle = '#ffe45c'; g.fillText(b.text, 0, 0);
+    g.font = "900 24px 'Outfit', sans-serif"; g.lineWidth = 5; g.strokeText(b.sub, 0, 52); g.fillStyle = '#7ee081'; g.fillText(b.sub, 0, 52);
     g.restore();
   }
 }
@@ -710,7 +710,7 @@ async function init() {
     if (!NAME_RE.test(name)) { $('name').classList.add('bad'); return; }
     store.set('name', name); $('name-start').value = name; finishSubmit(name);
   });
-  const fonts = Promise.race([Promise.all([document.fonts.load("900 12px 'Nunito'"), document.fonts.load("16px 'Lilita One'")]), new Promise(r => setTimeout(r, 2500))]);
+  const fonts = Promise.race([Promise.all([document.fonts.load("800 12px 'Plus Jakarta Sans'"), document.fonts.load("900 16px 'Outfit'")]), new Promise(r => setTimeout(r, 2500))]);
   await Promise.all([loadAssets(), fonts]);
   buildSprites(); buildBackground();
   $('best-title').textContent = fmt(game.best); showCard('title'); updateHud();

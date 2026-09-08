@@ -1,0 +1,53 @@
+/* Shared UI kit for index.html and game.html: type tokens, header bar, arcade buttons, contract terminal.
+   Fonts (Google): Outfit 700-900 = display/buttons, Plus Jakarta Sans = UI/body, JetBrains Mono = addresses. */
+:root{
+  --ui-bar:rgba(8,15,30,.75);
+  --ui-glass:rgba(15,23,42,.8);
+  --ui-line:rgba(255,215,0,.4);
+  --ui-gold:#FACC15;
+  --ui-edge:#B45309;
+  --ui-glow:rgba(234,179,8,.5);
+  --ui-green:#22c55e;
+  --font-display:'Outfit','Plus Jakarta Sans',system-ui,sans-serif;
+  --font-ui:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+
+/* ---- unified header bar ---- */
+.site-header{background:var(--ui-bar);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,175,55,.3)}
+
+/* ---- nav / social buttons: dark glass, gold edge, arcade press ---- */
+.nav-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;box-sizing:border-box;height:40px;padding:0 14px;border-radius:8px;
+  background:var(--ui-glass);border:1px solid var(--ui-line);border-bottom:4px solid var(--ui-edge);box-shadow:0 4px 12px rgba(0,0,0,.4);
+  color:var(--ui-gold);font:900 12px/1 var(--font-display);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:transform .12s,box-shadow .12s,border-color .12s,color .12s}
+.nav-btn.icon{width:40px;padding:0}
+.nav-btn svg{width:18px;height:18px;fill:currentColor;display:block}
+.nav-btn:hover{box-shadow:0 0 15px var(--ui-glow);transform:translateY(-1px);border-color:rgba(255,215,0,.7);border-bottom-color:var(--ui-edge);color:#fff}
+.nav-btn:active,.nav-btn[aria-pressed="true"]{transform:translateY(3px);border-bottom-width:1px;box-shadow:none}
+.nav-btn:focus-visible{outline:2px solid var(--ui-gold);outline-offset:2px}
+
+/* ---- primary arcade button (gold) ---- */
+.gold-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;cursor:pointer;
+  font:900 13px/1 var(--font-display);letter-spacing:.1em;text-transform:uppercase;padding:11px 18px;border-radius:8px;
+  border:1px solid rgba(255,235,150,.6);border-bottom:4px solid var(--ui-edge);color:#1a1200;
+  background:linear-gradient(180deg,#fde68a,#facc15 55%,#d4a017);box-shadow:0 4px 12px rgba(0,0,0,.4);text-decoration:none;white-space:nowrap;
+  transition:transform .12s,box-shadow .12s,filter .12s,background .2s}
+.gold-btn:hover{box-shadow:0 0 15px var(--ui-glow);transform:translateY(-1px);filter:brightness(1.06);color:#1a1200}
+.gold-btn:active{transform:translateY(3px);border-bottom-width:1px;box-shadow:none}
+.gold-btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.gold-btn.copied{background:linear-gradient(180deg,#86efac,#22c55e 55%,#15803d);border-color:rgba(190,255,210,.7);border-bottom-color:#14532d;color:#04150a;
+  box-shadow:0 0 18px rgba(34,197,94,.7);animation:copiedPop .35s cubic-bezier(.2,.8,.2,1)}
+.gold-btn .check{font-size:15px;line-height:1}
+@keyframes copiedPop{0%{transform:scale(.94)}60%{transform:scale(1.05)}100%{transform:none}}
+
+/* ---- contract terminal (bottom bar) ---- */
+.ca{display:flex;align-items:center;gap:10px;position:relative}
+.ca-pill{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:8px;background:#04090f;
+  border:1px solid rgba(212,175,55,.45);box-shadow:0 0 0 1px rgba(0,0,0,.7),0 0 18px rgba(212,175,55,.2),inset 0 0 26px rgba(34,197,94,.07);
+  font:700 13px/1 var(--font-mono);color:#d9f99d;letter-spacing:.02em;text-shadow:0 0 6px rgba(163,230,53,.35)}
+.ca-pill b{color:var(--ui-gold);font:900 11px/1 var(--font-display);letter-spacing:.16em;text-shadow:none}
+.ca-pill .cursor{display:inline-block;width:7px;height:14px;background:var(--ui-green);box-shadow:0 0 8px rgba(34,197,94,.8);animation:blink 1.1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){.nav-btn,.gold-btn{transition:none}.gold-btn.copied{animation:none}.ca-pill .cursor{animation:none}}
