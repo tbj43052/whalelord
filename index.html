@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./ui.css">
 <link rel="stylesheet" href="./chat.css">
+<link rel="stylesheet" href="./loading.css">
 <style>
 :root{--abyss:#050b14;--deep:#0b192e;--gold:#d4af37;--gold-light:#f3d97a;--gold-pale:#fff2b0;--gold-dark:#8a6a12;--gold-deep:#b08d24;--ink:#e6f1f7;--aqua:#6fd8f0}
 html,body{margin:0;height:100%;background:var(--abyss);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);overflow:hidden}
@@ -102,6 +103,8 @@ footer{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;grid-tem
     </div>
   </div>
 </div>
+<script src="./whale-sprite.js"></script>
+<script src="./loading.js"></script>
 <script src="./chat.js"></script>
 <script>
 // Edit this array to change bubble art, titles and panel text. left/top/size are % of the 2048x1056 artwork.
@@ -113,6 +116,10 @@ const memories = [
   { title: 'Whale Watch', image: './assets/whale-watch-v5.png', lore: 'Just spotted another school of jeets trying to swim against the current. Watching them panic sell is better than Netflix. $WHALELORD.', left: '70.2%', top: '62.3%', size: '16.8%', dur: '4.8s', delay: '0.8s' }
 ];
 const HOVER_SOUND = true;
+// "Deep Dive" loading screen until the scene art and the five bubble images are in
+WhaleLoader.start();
+{ const srcs = ['./assets/whale-lord-hd-stage-v3.png', ...memories.map(m => m.image)]; let n = 0;
+  srcs.forEach(src => { const im = new Image(); im.onload = im.onerror = () => { n++; WhaleLoader.set(n / srcs.length); if (n === srcs.length) WhaleLoader.done(); }; im.src = src; }); }
 const scene = document.getElementById('scene');
 // ambient bubbles
 const bubbles = document.getElementById('bubbles');
@@ -140,7 +147,7 @@ window.addEventListener('keydown', e => { if (open === null) return; if (e.key =
 // copy CA: the button itself flips to a green COPIED! state for a moment
 const copyBtn = document.getElementById('copy'); let copyTimer;
 copyBtn.addEventListener('click', () => {
-  navigator.clipboard?.writeText(document.getElementById('ca').textContent);
+  navigator.clipboard?.writeText(document.getElementById('ca').textContent).catch(() => {});
   copyBtn.classList.add('copied'); copyBtn.innerHTML = '<span class="check" aria-hidden="true">&#10003;</span> COPIED!';
   clearTimeout(copyTimer); copyTimer = setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy CA'; }, 1600);
 });

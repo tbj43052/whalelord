@@ -1,0 +1,13 @@
+/* "Deep Dive" loading screen (loading.js builds the markup). Glass over the page: deep ocean void + 12px backdrop blur. */
+.deep-loader{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% -10%,rgba(12,80,120,.55),rgba(3,10,20,.94) 65%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;overflow:hidden;transition:opacity .45s ease}
+.deep-loader.out{opacity:0;pointer-events:none}
+.deep-scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.deep-ui{position:absolute;left:50%;top:64%;transform:translateX(-50%);width:min(440px,84vw);display:grid;gap:14px;justify-items:center;text-align:center}
+/* progress bar: dark glass track inside a 3D gold bezel (same edge treatment as the arcade buttons) */
+.deep-bar{position:relative;width:100%;height:28px;border-radius:10px;background:rgba(2,8,16,.72);border:2px solid #c9961a;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -3px 0 rgba(0,0,0,.5),0 4px 0 #6b4a05,0 0 18px rgba(234,179,8,.45)}
+.deep-fill{position:absolute;left:3px;top:3px;bottom:3px;width:0;border-radius:7px;background:linear-gradient(90deg,#b8860b,#fde68a 30%,#facc15 55%,#fff3b0 75%,#f59e0b);background-size:200% 100%;animation:deepSheen 1.6s linear infinite;box-shadow:0 0 12px rgba(250,204,21,.7);transition:width .25s ease-out}
+@keyframes deepSheen{from{background-position:0 0}to{background-position:-200% 0}}
+.deep-fish{position:absolute;left:0;top:-14px;width:100%;height:56px;pointer-events:none;display:block}
+.deep-title{font:900 clamp(20px,3vw,30px)/1 'Outfit','Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;background:linear-gradient(180deg,#fff2b0,#facc15 50%,#b45309 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #3a2a05) drop-shadow(0 0 14px rgba(234,179,8,.45))}
+.deep-sub{font:600 14px/1.4 'Plus Jakarta Sans','Inter',system-ui,sans-serif;color:#fff;opacity:.85;letter-spacing:.02em}
+@media (prefers-reduced-motion:reduce){.deep-fill{animation:none}.deep-loader{transition:none}}

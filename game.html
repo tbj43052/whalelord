@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./ui.css">
 <link rel="stylesheet" href="./chat.css">
+<link rel="stylesheet" href="./loading.css">
 <style>
 :root{--abyss:#050b14;--deep:#0b192e;--gold:#d4af37;--gold-light:#f3d97a;--gold-pale:#fff2b0;--gold-dark:#8a6a12;--gold-deep:#b08d24;--ink:#e6f1f7;--aqua:#6fd8f0;--hud:#ffe45c;--cream:#f7f1d6;--green:#7ee081;--red:#ff5d5d}
 *{box-sizing:border-box}
@@ -180,11 +181,13 @@ footer{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-templa
 // copy CA: the button itself flips to a green COPIED! state for a moment
 const copyBtn = document.getElementById('copy'); let copyTimer;
 copyBtn.addEventListener('click', () => {
-  navigator.clipboard?.writeText(document.getElementById('ca').textContent);
+  navigator.clipboard?.writeText(document.getElementById('ca').textContent).catch(() => {});
   copyBtn.classList.add('copied'); copyBtn.innerHTML = '<span class="check" aria-hidden="true">&#10003;</span> COPIED!';
   clearTimeout(copyTimer); copyTimer = setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy CA'; }, 1600);
 });
 </script>
+<script src="./whale-sprite.js"></script>
+<script src="./loading.js"></script>
 <script src="./chat.js"></script>
 <script src="./game.js"></script>
 </body>
