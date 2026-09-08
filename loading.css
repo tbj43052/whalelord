@@ -1,13 +1,24 @@
-/* "Deep Dive" loading screen (loading.js builds the markup). Glass over the page: deep ocean void + 12px backdrop blur. */
-.deep-loader{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% -10%,rgba(12,80,120,.55),rgba(3,10,20,.94) 65%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;overflow:hidden;transition:opacity .45s ease}
-.deep-loader.out{opacity:0;pointer-events:none}
-.deep-scene{position:absolute;inset:0;width:100%;height:100%;display:block}
-.deep-ui{position:absolute;left:50%;top:64%;transform:translateX(-50%);width:min(440px,84vw);display:grid;gap:14px;justify-items:center;text-align:center}
-/* progress bar: dark glass track inside a 3D gold bezel (same edge treatment as the arcade buttons) */
-.deep-bar{position:relative;width:100%;height:28px;border-radius:10px;background:rgba(2,8,16,.72);border:2px solid #c9961a;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -3px 0 rgba(0,0,0,.5),0 4px 0 #6b4a05,0 0 18px rgba(234,179,8,.45)}
-.deep-fill{position:absolute;left:3px;top:3px;bottom:3px;width:0;border-radius:7px;background:linear-gradient(90deg,#b8860b,#fde68a 30%,#facc15 55%,#fff3b0 75%,#f59e0b);background-size:200% 100%;animation:deepSheen 1.6s linear infinite;box-shadow:0 0 12px rgba(250,204,21,.7);transition:width .25s ease-out}
-@keyframes deepSheen{from{background-position:0 0}to{background-position:-200% 0}}
-.deep-fish{position:absolute;left:0;top:-14px;width:100%;height:56px;pointer-events:none;display:block}
-.deep-title{font:900 clamp(20px,3vw,30px)/1 'Outfit','Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;background:linear-gradient(180deg,#fff2b0,#facc15 50%,#b45309 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #3a2a05) drop-shadow(0 0 14px rgba(234,179,8,.45))}
-.deep-sub{font:600 14px/1.4 'Plus Jakarta Sans','Inter',system-ui,sans-serif;color:#fff;opacity:.85;letter-spacing:.02em}
-@media (prefers-reduced-motion:reduce){.deep-fill{animation:none}.deep-loader{transition:none}}
+/* Loading screen: styles from the "The Whale Lord Loading Screen" component, mounted by loading.js as #loading-screen.
+   Counts 1 → 100% over 2.8 s, holds at 99% until assets are in, then fades out over .5 s. */
+.ls{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:6vh;box-sizing:border-box;overflow:hidden;background:radial-gradient(ellipse 90% 75% at 50% 42%,#10203f 0%,#0a1629 48%,#050b17 100%);font-family:'Jost','Outfit',sans-serif;color:#e6ebf5;opacity:1;transition:opacity .5s ease}
+.ls.is-done{opacity:0;pointer-events:none}
+.ls-glow,.ls-stars,.ls-vignette{position:absolute;inset:0;pointer-events:none}
+.ls-glow{background:radial-gradient(ellipse 40% 30% at 18% 22%,rgba(120,150,210,.10),transparent 70%),radial-gradient(ellipse 45% 35% at 82% 78%,rgba(90,120,190,.10),transparent 70%),radial-gradient(ellipse 30% 50% at 70% 15%,rgba(140,160,220,.06),transparent 70%)}
+.ls-vignette{background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
+.ls-inner{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;padding:0 6vw;box-sizing:border-box}
+.ls-title{position:relative;display:inline-block;font-family:'Cinzel',serif;font-weight:900;font-size:clamp(30px,7.4vw,104px);letter-spacing:.03em;line-height:1;text-transform:uppercase;white-space:nowrap}
+.ls-title-shadow{position:absolute;inset:0;color:#7a5a12;user-select:none;text-shadow:1px 1px 0 #6a4d0f,2px 2px 0 #5b420d,3px 3px 0 #4c370b,4px 4px 0 #3d2c09,5px 5px 0 #2f2207,6px 6px 0 #221806,10px 16px 28px rgba(0,0,0,.75)}
+.ls-title-gold{position:relative;background:linear-gradient(180deg,#fff6d0 0%,#f6d97a 20%,#dfae2e 44%,#b98a14 54%,#e3b93f 70%,#fff1b5 88%,#d1a02a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.ls-row{margin-top:clamp(26px,4.5vh,46px);display:flex;align-items:center;gap:clamp(14px,2vw,26px);width:min(780px,84vw)}
+.ls-bezel{flex:1;min-width:0;padding:2px;border-radius:999px;background:linear-gradient(180deg,#ecc75e 0%,#8a6716 55%,#d0a73c 100%);box-shadow:0 10px 28px rgba(0,0,0,.6),0 0 22px rgba(255,200,90,.12)}
+.ls-track{padding:3px;border-radius:999px;background:linear-gradient(180deg,#060c1a 0%,#0d1a33 100%);box-shadow:inset 0 3px 8px rgba(0,0,0,.85),inset 0 -1px 0 rgba(255,255,255,.04)}
+.ls-lane{position:relative;height:clamp(18px,2.6vw,28px)}
+.ls-fill{position:absolute;left:0;top:0;bottom:0;width:1%;border-radius:999px;overflow:hidden;background:linear-gradient(180deg,#fff3ba 0%,#f4d05c 15%,#dfad2a 36%,#c39118 56%,#e4bb43 76%,#fff0b2 100%);box-shadow:0 0 18px rgba(255,205,90,.45),0 0 4px rgba(255,220,120,.6)}
+.ls-gloss{position:absolute;top:2px;left:8px;right:8px;height:34%;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.7) 35%,rgba(255,255,255,.35) 70%,rgba(255,255,255,0) 100%)}
+.ls-sheen{position:absolute;top:0;bottom:0;left:0;width:28%;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 100%);animation:ls-sheen 2.8s ease-in-out infinite}
+@keyframes ls-sheen{0%{transform:translateX(-110%)}60%,100%{transform:translateX(470%)}}
+.ls-pct{display:flex;align-items:baseline;min-width:3em;white-space:nowrap;font-family:'Cinzel',serif;font-weight:700;font-size:clamp(24px,3.4vw,44px);line-height:1;color:#ffe38f;text-shadow:0 0 12px rgba(255,205,95,.6),0 0 36px rgba(255,180,60,.3),0 2px 3px rgba(0,0,0,.7);font-variant-numeric:tabular-nums}
+.ls-caption{margin-top:clamp(30px,6vh,56px);text-align:center;font-weight:500;letter-spacing:.24em;text-transform:uppercase;font-size:clamp(12px,1.35vw,19px);color:#e9edf6;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.ls-anchor{position:absolute;left:50%;bottom:6vh;transform:translateX(-50%);display:flex;filter:drop-shadow(0 0 10px rgba(255,200,90,.45))}
+.ls-anchor svg{fill:none;stroke:#d9a72a;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media (prefers-reduced-motion:reduce){.ls-sheen{animation:none}}
